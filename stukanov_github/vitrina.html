@@ -1,0 +1,189 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, nofollow"><title>Кейс: доктор Стуканов</title>
+<style>
+/* Layout: витрина кейса в стиле Екатерины — графит и шампань; в центре телефон с живым сайтом, над ним подпись шага сценария, под ним подпись автора. Формат кадра 9:16 для Reels. Одна тёмная тема намеренно. */
+:root {
+  --bg: #0d0e10;
+  --panel: #16181b;
+  --text: #f4f4f0;
+  --soft: #b8bdc2;
+  --muted: #80868c;
+  --gold: #c8a96a;
+  --line: #2a2d31;
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: radial-gradient(90% 60% at 50% 40%, #1b1d21 0%, var(--bg) 70%); color: var(--text); font-family: var(--sans); overflow: hidden; }
+.stage { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 18px 16px 14px; }
+.cap { width: min(560px, 100%); min-height: 112px; text-align: center; display: flex; flex-direction: column; justify-content: flex-end; }
+.cap small { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); transition: opacity .4s; }
+.cap h1 { margin: 8px 0 0; font-family: var(--serif); font-weight: 400; font-size: clamp(22px, 3.4vh, 32px); line-height: 1.15; text-wrap: balance; transition: opacity .4s, transform .4s; }
+.cap h1 em { font-style: italic; color: var(--gold); }
+.cap.out small, .cap.out h1 { opacity: 0; }
+.cap.out h1 { transform: translateY(8px); }
+.phone-box { position: relative; width: calc(410px * var(--s, 1)); height: calc(864px * var(--s, 1)); flex: none; }
+.phone { position: absolute; left: 0; top: 0; width: 410px; height: 864px; transform: scale(var(--s, 1)); transform-origin: 0 0; border-radius: 58px; background: #050506; padding: 10px; box-shadow: 0 0 0 2px #2c2f34, 0 40px 120px rgba(0, 0, 0, .6), 0 0 80px rgba(200, 169, 106, .08); }
+.phone::before { content: ""; position: absolute; top: 20px; left: 50%; width: 110px; height: 30px; margin-left: -55px; border-radius: 20px; background: #050506; z-index: 3; }
+.phone { padding-top: 46px; }
+.phone .status { position: absolute; top: 18px; left: 34px; right: 34px; display: flex; justify-content: space-between; font: 600 14px var(--sans); color: #f4f4f0; z-index: 2; }
+.phone iframe { display: block; width: 390px; height: 808px; border: 0; border-radius: 0 0 48px 48px; background: #FFF9EC; }
+.tap { position: absolute; z-index: 4; width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 50%; background: rgba(200, 169, 106, .35); border: 2px solid rgba(255, 255, 255, .8); opacity: 0; pointer-events: none; }
+.tap.go { animation: tap .6s ease-out; }
+@keyframes tap { 0% { opacity: 1; transform: scale(.5); } 100% { opacity: 0; transform: scale(1.5); } }
+.sign { text-align: center; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.sign b { color: var(--text); font-weight: 600; }
+.bar { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10; background: rgba(22, 24, 27, .9); border: 1px solid var(--line); border-radius: 999px; padding: 6px; backdrop-filter: blur(8px); }
+.bar button { border: 0; background: transparent; color: var(--text); font: 600 13px var(--sans); padding: 9px 14px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+.bar button:hover { background: #24272b; }
+.bar button.on { background: var(--gold); color: #0b0c0d; }
+.prog { position: fixed; left: 0; top: 0; height: 3px; background: var(--gold); width: 0; z-index: 10; }
+.rec .bar, .rec .prog { display: none; }
+.end { position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; text-align: center; padding: 30px; border-radius: 58px; background: rgba(13, 14, 16, .92); opacity: 0; pointer-events: none; transition: opacity .6s; transform: scale(var(--s, 1)); transform-origin: 0 0; width: 410px; height: 864px; }
+.end.show { opacity: 1; }
+.end h2 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: 34px; line-height: 1.15; }
+.end h2 em { color: var(--gold); font-style: italic; }
+.end ul { list-style: none; padding: 0; margin: 22px 0; display: grid; gap: 8px; color: var(--soft); font-size: 16px; }
+.end ul li::before { content: "✓  "; color: var(--gold); }
+.end p { margin: 0; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.end p b { display: block; color: var(--text); margin-bottom: 6px; font-size: 13px; }
+@media (prefers-reduced-motion: reduce) { .cap h1, .cap small, .end { transition: none; } }
+</style></head><body>
+
+<div class="prog" id="prog"></div>
+<div class="stage">
+  <div class="cap" id="cap"><small id="cap-k">Кейс</small><h1 id="cap-t">Сайт ветеринарного <em>кардиолога‑хирурга</em></h1></div>
+  <div class="phone-box" id="pbox">
+    <div class="phone"><div class="status" aria-hidden="true"><span>9:41</span><span>●●● ▮</span></div><iframe id="site" src="index.html" title="Сайт доктора Стуканова"></iframe></div>
+    <span class="tap" id="tap"></span>
+    <div class="end" id="end">
+      <div>
+        <h2>Сайт, который <em>отвечает вместо телефона</em></h2>
+        <ul><li>Онлайн‑запись без звонка</li><li>Памятки для владельцев</li><li>Интерактивное сердце</li><li>Бренд и стратегия</li></ul>
+        <p><b>Болдырева Екатерина</b>Цифровые решения для бизнеса</p>
+      </div>
+    </div>
+  </div>
+  <div class="sign"><b>Болдырева Екатерина</b> · цифровые решения для бизнеса</div>
+</div>
+<div class="bar" role="toolbar" aria-label="Управление показом">
+  <button type="button" id="b-play">Пауза</button>
+  <button type="button" id="b-again">С начала</button>
+  <button type="button" id="b-free">Листать самому</button>
+  <button type="button" id="b-rec" title="Скрыть кнопки для записи экрана">Режим записи</button>
+</div>
+
+<script>
+(function () {
+  var frame = document.getElementById('site'), pbox = document.getElementById('pbox');
+  var cap = document.getElementById('cap'), capK = document.getElementById('cap-k'), capT = document.getElementById('cap-t');
+  var tapEl = document.getElementById('tap'), endEl = document.getElementById('end'), prog = document.getElementById('prog');
+  var playing = true, free = false, timers = [], scrollAnim = null, startAt = 0, total = 44000, raf = null;
+
+  function fit() {
+    var h = window.innerHeight - 112 - 20 - 14 - 36 - 40;
+    var s = Math.min(1, h / 864, (window.innerWidth - 32) / 410);
+    document.documentElement.style.setProperty('--s', Math.max(.4, s).toFixed(3));
+  }
+  window.addEventListener('resize', fit); fit();
+
+  function doc() { try { return frame.contentDocument; } catch (e) { return null; } }
+  function win() { try { return frame.contentWindow; } catch (e) { return null; } }
+
+  function setCap(k, t) {
+    cap.classList.add('out');
+    setTimeout(function () { capK.textContent = k; capT.innerHTML = t; cap.classList.remove('out'); }, 380);
+  }
+  function ease(x) { return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
+  function scrollToY(y, ms) {
+    var w = win(); if (!w) return;
+    var from = w.scrollY, t0 = performance.now();
+    cancelAnimationFrame(scrollAnim);
+    (function step(now) {
+      var k = Math.min(1, (now - t0) / ms);
+      w.scrollTo(0, from + (y - from) * ease(k));
+      if (k < 1) scrollAnim = requestAnimationFrame(step);
+    })(t0);
+  }
+  function scrollToEl(sel, ms, off) {
+    var d = doc(); if (!d) return;
+    var el = d.querySelector(sel); if (!el) return;
+    scrollToY(el.getBoundingClientRect().top + win().scrollY - (off || 70), ms || 1400);
+  }
+  function tapOn(sel) {
+    var d = doc(); if (!d) return;
+    var el = d.querySelector(sel); if (!el) return;
+    var r = el.getBoundingClientRect(), s = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--s')) || 1;
+    tapEl.style.left = ((10 + r.left + r.width / 2) * s) + 'px';
+    tapEl.style.top = ((46 + r.top + r.height / 2) * s) + 'px';
+    tapEl.classList.remove('go'); void tapEl.offsetWidth; tapEl.classList.add('go');
+    el.click();
+  }
+  function prepare() {
+    var d = doc(); if (!d || d.getElementById('showcase-style')) return;
+    var st = d.createElement('style');
+    st.id = 'showcase-style';
+    st.textContent = '.draft{display:none!important}html{scroll-behavior:auto!important}';
+    d.head.appendChild(st);
+  }
+
+  var script = [
+    [0, function () { endEl.classList.remove('show'); scrollToY(0, 600); setCap('Кейс · ветеринария', 'Сайт ветеринарного <em>кардиолога‑хирурга</em>'); }],
+    [3500, function () { setCap('Задача', 'Врач на операциях, а личный телефон <em>не замолкает</em>'); scrollToY(380, 1600); }],
+    [8000, function () { setCap('Фишка', 'Сердце бьётся <em>в ритме вашего питомца</em>'); scrollToEl('#heart', 1500, 40); }],
+    [10500, function () { tapOn('#heart-btn'); }],
+    [11800, function () { tapOn('[data-sp="cat"]'); }],
+    [13200, function () { tapOn('#heart-btn'); }],
+    [14600, function () { setCap('Польза', 'Тест дыхания во сне <em>за 30 секунд</em>'); scrollToEl('.breath', 1100, 120); }],
+    [16200, function () { tapOn('#breath-btn'); }], [16900, function () { tapOn('#breath-btn'); }], [17600, function () { tapOn('#breath-btn'); }], [18300, function () { tapOn('#breath-btn'); }],
+    [19500, function () { setCap('Главное', 'Кардиология, хирургия, чекап — <em>запись в одно касание</em>'); scrollToEl('#dirs', 1600); }],
+    [23500, function () { setCap('Открыто', 'Цены видны сразу — <em>меньше вопросов</em> по телефону'); scrollToEl('#prices', 1500); }],
+    [27000, function () { setCap('Вместо звонков', 'Памятки для владельцев <em>с чек‑листами</em>'); scrollToEl('#care', 1400); }],
+    [29000, function () { tapOn('.card[data-memo="op"]'); }],
+    [30300, function () { var d = doc(); if (!d) return; var b = d.querySelectorAll('#m-op .checks input'); [0, 1, 2].forEach(function (i, n) { setTimeout(function () { if (b[i] && !b[i].checked) { b[i].click(); } }, n * 450); }); }],
+    [32300, function () { var d = doc(); var m = d && d.getElementById('m-op'); if (m && m.open) m.close(); setCap('Без звонка', 'Онлайн‑запись — заявка <em>сразу в мессенджер</em>'); scrollToEl('#book', 1500); }],
+    [34300, function () { scrollToEl('#times', 900, 260); }],
+    [35500, function () { tapOn('#times input:not([disabled]) + span'); }],
+    [36600, function () { setCap('Доверие', 'Истории пациентов, <em>когда другие отказали</em>'); scrollToEl('#reviews', 1600); }],
+    [40500, function () { endEl.classList.add('show'); setCap('Болдырева Екатерина', 'Цифровые решения <em>для бизнеса</em>'); }]
+  ];
+
+  function clearAll() { timers.forEach(clearTimeout); timers = []; cancelAnimationFrame(scrollAnim); cancelAnimationFrame(raf); }
+  function resetSite() {
+    var d = doc(); if (!d) return;
+    try { Object.keys(localStorage).forEach(function (k) { if (k.indexOf('stk-') === 0) localStorage.removeItem(k); }); } catch (e) {}
+    var m = d.getElementById('m-op'); if (m && m.open) m.close();
+    var r = d.getElementById('breath-reset'); if (r) r.click();
+    d.querySelectorAll('#m-op .checks input').forEach(function (i) { if (i.checked) i.click(); });
+    var dog = d.querySelector('[data-sp="dog"]'); if (dog) dog.click();
+  }
+  function tick() {
+    var k = Math.min(1, (performance.now() - startAt) / total);
+    prog.style.width = (k * 100) + '%';
+    if (k < 1) raf = requestAnimationFrame(tick);
+  }
+  function run() {
+    clearAll(); prepare(); resetSite();
+    startAt = performance.now(); tick();
+    script.forEach(function (s) { timers.push(setTimeout(s[1], s[0])); });
+    timers.push(setTimeout(function () { if (playing && !free) run(); }, total));
+  }
+  function setPlay(on) {
+    playing = on;
+    document.getElementById('b-play').textContent = on ? 'Пауза' : 'Смотреть';
+    if (on) { free = false; document.getElementById('b-free').classList.remove('on'); endEl.classList.remove('show'); run(); } else { clearAll(); }
+  }
+  document.getElementById('b-play').addEventListener('click', function () { setPlay(!playing); });
+  document.getElementById('b-again').addEventListener('click', function () { setPlay(true); });
+  document.getElementById('b-free').addEventListener('click', function () {
+    free = !free; this.classList.toggle('on', free);
+    if (free) { setPlay(false); endEl.classList.remove('show'); prog.style.width = '0'; setCap('Попробуйте сами', 'Листайте сайт <em>внутри телефона</em>'); }
+  });
+  document.getElementById('b-rec').addEventListener('click', function () { document.body.classList.add('rec'); setPlay(true); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') document.body.classList.remove('rec'); });
+
+  frame.addEventListener('load', function () { prepare(); setTimeout(run, 600); });
+})();
+</script>
+</body></html>
